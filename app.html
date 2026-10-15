@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compressor Math - app</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #4a5a6a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .big { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin-top: 0.8em; }
+  .err { color: #b00; font-weight: 700; }
+  label { display: block; margin-top: 0.6em; font-size: 0.9em; }
+  input, select { max-width: 12em; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+</style>
+</head>
+<body>
+<h1>Compressor Math</h1>
+<p class="tag">CFM truth, recovery truth and duty truth - labeled norms, honest arithmetic.</p>
+
+<div class="card">
+  <h3>The CFM truth</h3>
+  <label for="c-sticker">Sticker CFM (at 40 PSI)</label>
+  <input id="c-sticker" type="number" step="any" value="5">
+  <p class="big" id="c-out"></p>
+</div>
+
+<div class="card">
+  <h3>The recovery truth</h3>
+  <label for="r-tank">Tank size (gallons)</label>
+  <input id="r-tank" type="number" step="any" value="20">
+  <label for="r-cutin">Cut-in pressure (PSI)</label>
+  <input id="r-cutin" type="number" step="any" value="90">
+  <label for="r-cutout">Cut-out pressure (PSI)</label>
+  <input id="r-cutout" type="number" step="any" value="120">
+  <label for="r-cfm">Honest pump CFM</label>
+  <input id="r-cfm" type="number" step="any" value="4">
+  <p class="big" id="r-out"></p>
+</div>
+
+<div class="card">
+  <h3>The duty truth</h3>
+  <label for="d-tool">Tool demand (CFM)</label>
+  <input id="d-tool" type="number" step="any" value="5">
+  <label for="d-pump">Honest pump CFM</label>
+  <input id="d-pump" type="number" step="any" value="4">
+  <p class="big" id="d-out"></p>
+</div>
+
+<p class="foot">The 0.8 pressure derate is a labeled norm - the arithmetic is honest, and the sander keeps the honest ledger.</p>
+
+<script src="engine.js"></script>
+<script>
+function g(id){ return document.getElementById(id); }
+function v(id){ var n = parseFloat(g(id).value); return isNaN(n) ? NaN : n; }
+function show(id, s, bad){ var el = g(id); el.textContent = s; el.className = bad ? "err big" : "big"; }
+
+function runCfm(){
+  var args = [v("c-sticker")];
+  var r = CompressorMath.cfmPlan.apply(null, args);
+  if (r.error) return show("c-out", r.error, true);
+  show("c-out", CompressorMath.renderCfm.apply(null, [r].concat(args)), false);
+}
+function runRecovery(){
+  var args = [v("r-tank"), v("r-cutin"), v("r-cutout"), v("r-cfm")];
+  var r = CompressorMath.recoveryPlan.apply(null, args);
+  if (r.error) return show("r-out", r.error, true);
+  show("r-out", CompressorMath.renderRecovery.apply(null, [r].concat(args)), false);
+}
+function runDuty(){
+  var args = [v("d-tool"), v("d-pump")];
+  var r = CompressorMath.dutyPlan.apply(null, args);
+  if (r.error) return show("d-out", r.error, true);
+  show("d-out", CompressorMath.renderDuty.apply(null, [r].concat(args)), false);
+}
+["c-sticker"].forEach(function(id){ g(id).addEventListener("input", runCfm); });
+["r-tank", "r-cutin", "r-cutout", "r-cfm"].forEach(function(id){ g(id).addEventListener("input", runRecovery); });
+["d-tool", "d-pump"].forEach(function(id){ g(id).addEventListener("input", runDuty); });
+runCfm(); runRecovery(); runDuty();
+</script>
+</body>
+</html>
