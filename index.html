@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compressor Math - the air compressor honesty tool</title>
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css">
+<style>
+  :root { --accent: #4a5a6a; }
+  h1 { color: var(--accent); margin-bottom: 0.2em; }
+  .tag { color: var(--accent); font-style: italic; }
+  .card { border: 1px solid #ddd; border-left: 4px solid var(--accent); padding: 1em 1.2em; margin: 1.2em 0; border-radius: 4px; }
+  .foot { margin-top: 2.5em; font-size: 0.85em; color: #777; }
+  .go { display: inline-block; margin-top: 0.8em; padding: 0.55em 1.1em; background: var(--accent); color: #fff; border-radius: 4px; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>Compressor Math</h1>
+<p class="tag">The CFM on the box was measured at 40 PSI, where no tool lives. Your sander breathes at 90, the tank empties mid-pass, and the recovery clock was never on the sticker.</p>
+<a class="go" href="app.html">Open the app &rarr;</a>
+<div class="card">
+  <h3>The CFM truth</h3>
+  <p>Marketing measures flow at 40 PSI; tools breathe at 90. The honest figure runs about 80% of the sticker - the 5 CFM box is a 4 CFM pump.</p>
+</div>
+<div class="card">
+  <h3>The recovery truth</h3>
+  <p>The tank holds a fixed gulp of free air between cut-in and cut-out. At the honest CFM, refilling it is a wait the tool feels every cycle.</p>
+</div>
+<div class="card">
+  <h3>The duty truth</h3>
+  <p>Put the tool's demand next to the pump's honest flow. Under half it runs all day; over the whole number the tool starves mid-pass.</p>
+</div>
+<div class="card">
+  <h3>What it never does</h3>
+  <p>It never sells you the bigger tank, never calls a sticker a promise, and never forgets the derate is a labeled norm - the sander keeps the honest ledger.</p>
+</div>
+<p class="foot">Compressor Math is open source - the engine is small enough to read, and the math is plain enough to argue with.</p>
+</body>
+</html>
